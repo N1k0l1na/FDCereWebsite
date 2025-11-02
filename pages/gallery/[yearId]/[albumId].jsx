@@ -25,6 +25,17 @@ export default function AlbumPage() {
       })
       .catch((e) => setErr(e.message));
   }, [query.albumId]);
+  
+  // preload first image (and next one for smoother lightbox)
+  useEffect(() => {
+    if (!items.length) return;
+    const preload = (i) => {
+      const img = new Image();
+      img.src = `/api/media/${items[i].id}`;
+    };
+    preload(0);
+    if (items.length > 1) preload(1);
+  }, [items]);
 
   return (
     <Layout>
